@@ -9,29 +9,30 @@ module "eks" {
   subnet_ids                     = module.vpc.private_subnets
   cluster_endpoint_public_access = true
 
-  wait_for_cluster_command = "aws eks describe-cluster --name ${local.cluster_name} --query cluster.status"
-  wait_for_cluster_status  = "ACTIVE"
-  wait_for_cluster_timeout = "600s" # Wait up to 10 minutes
-
   eks_managed_node_group_defaults = {
     ami_type = "AL2_x86_64"
+
   }
 
   eks_managed_node_groups = {
     one = {
-      name            = "node-group-1"
-      instance_types  = ["t3.small"]
-      min_size        = 1
-      max_size        = 3
-      desired_size    = 2
+      name = "node-group-1"
+
+      instance_types = ["t3.small"]
+
+      min_size     = 1
+      max_size     = 3
+      desired_size = 2
     }
 
     two = {
-      name            = "node-group-2"
-      instance_types  = ["t3.small"]
-      min_size        = 1
-      max_size        = 2
-      desired_size    = 1
+      name = "node-group-2"
+
+      instance_types = ["t3.small"]
+
+      min_size     = 1
+      max_size     = 2
+      desired_size = 1
     }
   }
 }
