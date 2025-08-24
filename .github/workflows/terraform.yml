@@ -57,4 +57,16 @@ jobs:
         if: steps.plan.outcome == 'failure'
         run: exit 1 #exits with a status code of 1 if the plan step failed, indicating an error
 
+      - name: Terraform apply
+        id: apple  
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push' #only runs the apply step if the event is a push to the main branch
+        run: terraform apply -auto-approve -input=false -parallelism=1 planfile #applies the changes required to reach the desired state of the configuration, as specified in the planfile
       
+      - name: Get Kube config file
+        id: getconfig
+        if: steps.apple.outcome== 'success'
+        run: aws eks update-kubeconfig --region ${{ env.AWS_REGION }} --name ${{ env.EKS_CLUSTER }}
+
+      - name: install ingress controller
+        if: steps.apple.outcome== 'success' && steps.getconfig.outcome== 'success'
+        run: kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/aws/deploy.yaml
