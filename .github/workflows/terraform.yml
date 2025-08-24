@@ -39,7 +39,9 @@ jobs:
       - name: Terraform Init
         id: init
         run: terraform init -backend-config="bucket=$BUCKET_TF_STATE" -backend-config="region=$AWS_REGION" -backend-config="key=global/s3/terraform.tfstate"
-
+      - name: Terraform format
+        id: formt
+        run: terraform fmt -recursive -check #checks if the input is formatted according to the standard style
       - name: Terraform format
         id: fmt
         run: terraform fmt -check #checks if the input is formatted according to the standard style
