@@ -10,8 +10,8 @@ module "eks" {
   cluster_endpoint_public_access = true
 
   # Removed wait_for_cluster_command to avoid shell command dependency; use Terraform outputs for cluster status.
-  wait_for_cluster_status  = "ACTIVE"
-  wait_for_cluster_timeout = "600s" # Wait up to 10 minutes
+  #wait_for_cluster_status  = "ACTIVE"
+  #wait_for_cluster_timeout = "600s" # Wait up to 10 minutes
 
   eks_managed_node_group_defaults = {
     ami_type = "AL2_x86_64"
